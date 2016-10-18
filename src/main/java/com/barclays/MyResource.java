@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -41,22 +43,38 @@ public class MyResource {
     	return p;
     }
     
+    @GET
+    @Path("{id}")
+    public Response getSpecificId(@PathParam("id") String id){
+    	System.out.println(id+" got the REST ID");
+    	return Response.status(200).build(); 
+    }
+    
     @POST
     @Path("person")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes({MediaType.APPLICATION_FORM_URLENCODED,MediaType.MULTIPART_FORM_DATA})
     @Produces(MediaType.APPLICATION_JSON)
-    public Person setPerson(HashMap<String, String> person){
-    	System.out.println(person);
-    	
-    	/*List<String> age = person.get("age");	
-    	List<String> name = person.get("name");*/
+    
+    public Person setPerson(@FormParam("name") String name, @FormParam("age") String age){
     	
     	Person p = new Person();
-    	p.setAge(Integer.parseInt(person.get("age")));
-    	p.setName(person.get("name"));
+    	p.setAge(Integer.parseInt(age));
+    	p.setName(name);
     	return p;
     	
     }
+   /* public Person setPerson(MultivaluedMap<String, String> person){
+    	System.out.println(person);
+    	
+    	List<String> age = person.get("age");	
+    	List<String> name = person.get("name");
+    	
+    	Person p = new Person();
+    	p.setAge(Integer.parseInt(age.get(0)));
+    	p.setName(name.get(0));
+    	return p;
+    	
+    }*/
    /* public Response setPerson(MultivaluedMap<String, String> person){
     	System.out.println(person);
     	
